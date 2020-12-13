@@ -89,61 +89,57 @@ std::vector<instruction> parse_input(const std::string &filename) {
 }
 
 std::pair<int, int> execute_instructions(const std::vector<instruction> &instructions) {
-    std::map<action, std::pair<int, int>> direction_offsets = {
-        {move_east,  { 1,  0}},
-        {move_west,  {-1,  0}},
-        {move_north, { 0,  1}},
-        {move_south, { 0, -1}},
-    };
-    const std::vector<action> directions_right_turn_order = {move_north, move_east, move_south, move_west};
-
-    int curr_x = 0, curr_y = 0;
-    action curr_direction = move_east;
-
-    auto curr_direction_index = [&directions_right_turn_order, &curr_direction] {
-        auto curr_direction_iter = std::find(directions_right_turn_order.begin(),
-                                             directions_right_turn_order.end(),
-                                             curr_direction);
-        return curr_direction_iter - directions_right_turn_order.begin();
-    };
+    int ship_x = 0, ship_y = 0;
+    int waypoint_rel_x = 10, waypoint_rel_y = 1;
 
     for (const instruction &instruction : instructions) {
         switch (instruction.action) {
         case move_north:
-            curr_y += instruction.arg;
+            waypoint_rel_y += instruction.arg;
             break;
 
         case move_south:
-            curr_y -= instruction.arg;
+            waypoint_rel_y -= instruction.arg;
             break;
 
         case move_east:
-            curr_x += instruction.arg;
+            waypoint_rel_x += instruction.arg;
             break;
 
         case move_west:
-            curr_x -= instruction.arg;
+            waypoint_rel_x -= instruction.arg;
             break;
 
         case turn_left:
+            {
+                int n_turns = instruction.arg / 90;
+                for (int i = 0; i < n_turns; ++i) {
+                    int new_waypoint_rel_x = -waypoint_rel_y;
+                    int new_waypoint_rel_y = waypoint_rel_x;
+
+                    waypoint_rel_x = new_waypoint_rel_x, waypoint_rel_y = new_waypoint_rel_y;
+                }
+            }
+            break;
+
         case turn_right:
             {
-                int i_curr_direction = curr_direction_index();
                 int n_turns = instruction.arg / 90;
-                int shift_modifier = instruction.action == turn_right ? 1 : -1;
-                int i_new_direction = (i_curr_direction + shift_modifier * n_turns) % directions_right_turn_order.size();
-                if (i_new_direction < 0) i_new_direction += directions_right_turn_order.size();
-                curr_direction = directions_right_turn_order[i_new_direction];
+                for (int i = 0; i < n_turns; ++i) {
+                    int new_waypoint_rel_x = waypoint_rel_y;
+                    int new_waypoint_rel_y = -waypoint_rel_x;
+
+                    waypoint_rel_x = new_waypoint_rel_x, waypoint_rel_y = new_waypoint_rel_y;
+                }
             }
             break;
 
         case move_forward:
-            auto [dx, dy] = direction_offsets[curr_direction];
-            curr_x += instruction.arg * dx;
-            curr_y += instruction.arg * dy;
+            ship_x += instruction.arg * waypoint_rel_x;
+            ship_y += instruction.arg * waypoint_rel_y;
             break;
         }
     }
 
-    return std::make_pair(curr_x, curr_y);
+    return std::make_pair(ship_x, ship_y);
 }
