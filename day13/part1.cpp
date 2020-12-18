@@ -2,17 +2,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
-
-
-struct skip {
-    const char *skipped_characters;
-    skip(const char *s) { skipped_characters = s; }
-
-    friend std::istream &operator >> (std::istream &is, const skip &manip) {
-        while (is && strchr(manip.skipped_characters, is.peek())) is.ignore();
-        return is;
-    }
-};
+#include "string_utils.h"
 
 
 void parse_input(const std::string &filename, int &start_time, std::vector<int> &bus_ids);

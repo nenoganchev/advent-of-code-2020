@@ -7,6 +7,7 @@
 #include <numeric>
 #include <bitset>
 #include <cmath>
+#include "string_utils.h"
 
 
 struct command {
@@ -19,24 +20,6 @@ struct command {
     std::string mask;
     uint64_t addr;
     uint64_t value;
-};
-
-
-struct expect {
-    expect(const std::string &str): expected_str(str) {}
-
-    friend std::istream &operator >> (std::istream &is, const expect &manip) {
-        for (char expected_char : manip.expected_str) {
-            char read_char;
-            if (!(is.get(read_char) && read_char == expected_char)) {
-                throw "UnexpectedArg";
-            }
-        }
-
-        return is;
-    }
-
-    std::string expected_str;
 };
 
 

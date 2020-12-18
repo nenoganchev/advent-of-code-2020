@@ -1,1 +1,1 @@
-clang++ -std=c++2a -Wall -Wextra -o solve part1.cpp
+clang++ -std=c++2a -Wall -Wextra -I../lib -L../lib -lutils -o solve part1.cpp

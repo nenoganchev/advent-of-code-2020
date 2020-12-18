@@ -2,21 +2,12 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include "string_utils.h"
 
 
 struct bus_descriptor {
     int id;
     int list_offset;
-};
-
-struct skip {
-    const char *skipped_characters;
-    skip(const char *s) { skipped_characters = s; }
-
-    friend std::istream &operator >> (std::istream &is, const skip &manip) {
-        while (is && strchr(manip.skipped_characters, is.peek())) is.ignore();
-        return is;
-    }
 };
 
 

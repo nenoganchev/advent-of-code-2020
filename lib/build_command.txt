@@ -1,0 +1,2 @@
+clang++ -std=c++2a -Wall -Wextra -c string_utils.cpp
+libtool -static -o libutils.a *utils.o
