@@ -14,3 +14,5 @@ struct expect {
 
     std::string expected_str;
 };
+
+void expect_line(std::istream &is, const std::string &expected_line);

@@ -27,3 +27,13 @@ std::istream & operator >> (std::istream &is, const expect &manip) {
 
     return is;
 }
+
+//
+// functions implementation
+//
+
+void expect_line(std::istream &is, const std::string &expected_line) {
+    std::string line;
+    std::getline(is, line);
+    if (line != expected_line) throw "Line expectation failed";
+}
