@@ -16,3 +16,6 @@ struct expect {
 };
 
 void expect_line(std::istream &is, const std::string &expected_line);
+
+bool is_digit(char c);
+bool is_space(char c);

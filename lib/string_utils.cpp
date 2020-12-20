@@ -1,4 +1,5 @@
 #include "string_utils.h"
+#include <cctype>
 
 //
 // skip implementation
@@ -36,4 +37,12 @@ void expect_line(std::istream &is, const std::string &expected_line) {
     std::string line;
     std::getline(is, line);
     if (line != expected_line) throw "Line expectation failed";
+}
+
+bool is_digit(char c) {
+    return std::isdigit(static_cast<unsigned char>(c));
+}
+
+bool is_space(char c) {
+    return std::isspace(static_cast<unsigned char>(c));
 }
