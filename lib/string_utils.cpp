@@ -22,7 +22,7 @@ std::istream & operator >> (std::istream &is, const expect &manip) {
     for (char expected_char : manip.expected_str) {
         char read_char;
         if (!(is.get(read_char) && read_char == expected_char)) {
-            throw "UnexpectedArg";
+            throw std::runtime_error("expect failed");
         }
     }
 
@@ -36,7 +36,7 @@ std::istream & operator >> (std::istream &is, const expect &manip) {
 void expect_line(std::istream &is, const std::string &expected_line) {
     std::string line;
     std::getline(is, line);
-    if (line != expected_line) throw "Line expectation failed";
+    if (line != expected_line) throw std::runtime_error("expect_line failed");
 }
 
 bool is_digit(char c) {
